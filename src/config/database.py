@@ -8,7 +8,7 @@ class Config:
 
      """Centralized configuration variables for VizoSyn backend."""
      
-     SQLALCHEMY_DATABASE_URI            = os.environ.get("DATABASE_URI", "")
+     SQLALCHEMY_DATABASE_URL            = os.environ.get("DATABASE_URL", "")
 
      SECRET_KEY                         = os.environ.get("JWT_SECRET_KEY", "")
 

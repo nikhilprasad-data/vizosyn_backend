@@ -3,10 +3,12 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from .database import Config
 
+db_url         = Config.SQLALCHEMY_DATABASE_URL
 
-db_url         = Config.SQLALCHEMY_DATABASE_URI 
-
-engine         = create_engine(db_url)
+engine = create_engine(
+    db_url, 
+    connect_args={'options': '-c search_path=master,collaboration,public'}
+)
 
 SessionLocal   = sessionmaker(autocommit= False, autoflush= False, bind= engine)
 
