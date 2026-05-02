@@ -36,7 +36,6 @@ INSERT INTO master.users (username, email, password_hash, is_active) VALUES
 ('ghost_simran', 'simran.ghost@test.com', '$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjIQ68Y.Oq', true),
 ('ghost_rajat', 'rajat.ghost@test.com', '$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjIQ68Y.Oq', true);
 
-
 --Iserting dummy data for master.locations TABLE
 
 INSERT INTO master.locations (city, state) VALUES 
@@ -52,36 +51,36 @@ INSERT INTO master.locations (city, state) VALUES
 --Iserting dummy data for master.profiles TABLE
 
 INSERT INTO master.profiles (user_id, location_id, full_name, bio, github_url, linkedin_url) VALUES 
-(1, 2, 'Sagar', 'Backend Architect | PostgreSQL', 'github.com/sagar', 'linkedin.com/in/sagar'),
-(2, 3, 'Ayush', 'Frontend Specialist | React', 'github.com/ayush', 'linkedin.com/in/ayush'),
-(3, 4, 'Sania', 'Data Scientist | ML', 'github.com/sania', 'linkedin.com/in/sania'),
-(4, 4, 'Samriddhi', 'UI/UX Designer | Figma', 'github.com/sam', 'linkedin.com/in/sam'),
-(5, 5, 'Rahul', 'DevOps Engineer', 'github.com/rahul', 'linkedin.com/in/rahul'),
-(6, 6, 'Neha', 'Cloud Architect | AWS', 'github.com/neha', 'linkedin.com/in/neha'),
-(7, 1, 'Karan', 'Security Operations', 'github.com/karan', 'linkedin.com/in/karan'),
-(8, 2, 'Rohit', 'QA Automation', 'github.com/rohit', 'linkedin.com/in/rohit'),
-(9, 3, 'Amit Sharma', 'Full-Stack Developer', 'github.com/amit', 'linkedin.com/in/amit'),
-(10, 4, 'Priya Singh', 'Frontend Engineer', 'github.com/priya', 'linkedin.com/in/priya'),
-(11, 5, 'Vikram Gupta', 'Backend Dev', 'github.com/vikram', 'linkedin.com/in/vikram'),
-(12, 6, 'Sneha Patel', 'DevOps Engineer', 'github.com/sneha', 'linkedin.com/in/sneha'),
-(13, 7, 'Rohan Verma', 'Backend Ninja', 'github.com/rohan', 'linkedin.com/in/rohan'),
-(14, 1, 'Pooja Reddy', 'React Developer', 'github.com/pooja', 'linkedin.com/in/pooja'),
-(15, 2, 'Aditya Rao', 'Cloud Architect', 'github.com/aditya', 'linkedin.com/in/aditya'),
-(16, 3, 'Kavita Das', 'Security Specialist', 'github.com/kavita', 'linkedin.com/in/kavita'),
-(17, 4, 'Manish Tiwari', 'QA Engineer', 'github.com/manish', 'linkedin.com/in/manish'),
-(18, 5, 'Riya Kapoor', 'Machine Learning', 'github.com/riya', 'linkedin.com/in/riya'),
-(19, 6, 'Kunal Joshi', 'Python Scripter', 'github.com/kunal', 'linkedin.com/in/kunal'),
-(20, 7, 'Swati Menon', 'Product Designer', 'github.com/swati', 'linkedin.com/in/swati'),
-(21, 1, 'Tarun Bhatia', 'Solutions Architect', 'github.com/tarun', 'linkedin.com/in/tarun'),
-(22, 2, 'Megha Nair', 'Node.js Developer', 'github.com/megha', 'linkedin.com/in/megha'),
-(23, 3, 'Yash Agarwal', 'API Designer', 'github.com/yash', 'linkedin.com/in/yash'),
-(24, 4, 'Anjali Roy', 'Vue.js Fanatic', 'github.com/anjali', 'linkedin.com/in/anjali'),
-(25, 5, 'Kabir Malhotra', 'Golang Developer', 'github.com/kabir', 'linkedin.com/in/kabir'),
-(26, 6, 'Nidhi Desai', 'Kubernetes Operator', 'github.com/nidhi', 'linkedin.com/in/nidhi'),
-(27, 7, 'Prateek Jain', 'Database Admin', 'github.com/prateek', 'linkedin.com/in/prateek'),
-(28, 1, 'Shruti Bansal', 'Scrum Master', 'github.com/shruti', 'linkedin.com/in/shruti'),
-(29, 2, 'Varun Chawla', 'SDE', 'github.com/varun', 'linkedin.com/in/varun'),
-(30, 3, 'Ritu Pandey', 'Test Engineer', 'github.com/ritu', 'linkedin.com/in/ritu');
+(1, 2, 'Sagar', 'Backend Architect | PostgreSQL', 'https://github.com/sagar', 'https://linkedin.com/in/sagar'),
+(2, 3, 'Ayush', 'Frontend Specialist | React', 'https://github.com/ayush', 'https://linkedin.com/in/ayush'),
+(3, 4, 'Sania', 'Data Scientist | ML', 'https://github.com/sania', 'https://linkedin.com/in/sania'),
+(4, 4, 'Samriddhi', 'UI/UX Designer | Figma', 'https://github.com/sam', 'https://linkedin.com/in/sam'),
+(5, 5, 'Rahul', 'DevOps Engineer', 'https://github.com/rahul', 'https://linkedin.com/in/rahul'),
+(6, 6, 'Neha', 'Cloud Architect | AWS', 'https://github.com/neha', 'https://linkedin.com/in/neha'),
+(7, 1, 'Karan', 'Security Operations', 'https://github.com/karan', 'https://linkedin.com/in/karan'),
+(8, 2, 'Rohit', 'QA Automation', 'https://github.com/rohit', 'https://linkedin.com/in/rohit'),
+(9, 3, 'Amit Sharma', 'Full-Stack Developer', 'https://github.com/amit', 'https://linkedin.com/in/amit'),
+(10, 4, 'Priya Singh', 'Frontend Engineer', 'https://github.com/priya', 'https://linkedin.com/in/priya'),
+(11, 5, 'Vikram Gupta', 'Backend Dev', 'https://github.com/vikram', 'https://linkedin.com/in/vikram'),
+(12, 6, 'Sneha Patel', 'DevOps Engineer', 'https://github.com/sneha', 'https://linkedin.com/in/sneha'),
+(13, 7, 'Rohan Verma', 'Backend Ninja', 'https://github.com/rohan', 'https://linkedin.com/in/rohan'),
+(14, 1, 'Pooja Reddy', 'React Developer', 'https://github.com/pooja', 'https://linkedin.com/in/pooja'),
+(15, 2, 'Aditya Rao', 'Cloud Architect', 'https://github.com/aditya', 'https://linkedin.com/in/aditya'),
+(16, 3, 'Kavita Das', 'Security Specialist', 'https://github.com/kavita', 'https://linkedin.com/in/kavita'),
+(17, 4, 'Manish Tiwari', 'QA Engineer', 'https://github.com/manish', 'https://linkedin.com/in/manish'),
+(18, 5, 'Riya Kapoor', 'Machine Learning', 'https://github.com/riya', 'https://linkedin.com/in/riya'),
+(19, 6, 'Kunal Joshi', 'Python Scripter', 'https://github.com/kunal', 'https://linkedin.com/in/kunal'),
+(20, 7, 'Swati Menon', 'Product Designer', 'https://github.com/swati', 'https://linkedin.com/in/swati'),
+(21, 1, 'Tarun Bhatia', 'Solutions Architect', 'https://github.com/tarun', 'https://linkedin.com/in/tarun'),
+(22, 2, 'Megha Nair', 'Node.js Developer', 'https://github.com/megha', 'https://linkedin.com/in/megha'),
+(23, 3, 'Yash Agarwal', 'API Designer', 'https://github.com/yash', 'https://linkedin.com/in/yash'),
+(24, 4, 'Anjali Roy', 'Vue.js Fanatic', 'https://github.com/anjali', 'https://linkedin.com/in/anjali'),
+(25, 5, 'Kabir Malhotra', 'Golang Developer', 'https://github.com/kabir', 'https://linkedin.com/in/kabir'),
+(26, 6, 'Nidhi Desai', 'Kubernetes Operator', 'https://github.com/nidhi', 'https://linkedin.com/in/nidhi'),
+(27, 7, 'Prateek Jain', 'Database Admin', 'https://github.com/prateek', 'https://linkedin.com/in/prateek'),
+(28, 1, 'Shruti Bansal', 'Scrum Master', 'https://github.com/shruti', 'https://linkedin.com/in/shruti'),
+(29, 2, 'Varun Chawla', 'SDE', 'https://github.com/varun', 'https://linkedin.com/in/varun'),
+(30, 3, 'Ritu Pandey', 'Test Engineer', 'https://github.com/ritu', 'https://linkedin.com/in/ritu');
 
 
 --Iserting dummy data for master.skills TABLE
