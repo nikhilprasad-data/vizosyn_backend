@@ -11,4 +11,4 @@ from .team import TeamBase, TeamResponse, TeamUpdate
 
 from .team_request import TeamRequestBase, TeamRequestResponse, TeamRequestHandle
 
-from .user_skill import UserSkillBase, UserSkillResponse
+from .user_skill import UserSkillBase, UserSkillResponse, UserSkillViewResponse

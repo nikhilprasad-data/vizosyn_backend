@@ -22,3 +22,9 @@ class UserSkillResponse(BaseModel):
      skill_name: list[str]
 
      model_config = ConfigDict(from_attributes= True)
+
+class UserSkillViewResponse(BaseModel):
+
+     skill_name: list[str]
+
+     model_config = ConfigDict(from_attributes= True)
