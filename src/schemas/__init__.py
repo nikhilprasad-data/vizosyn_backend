@@ -7,7 +7,7 @@ from .user import UserBase, UserSignup, UserResponse, UserLogin
 
 from .profile import ProfileBase, ProfileResponse, ProfileUpdate
 
-from .team import TeamBase, TeamResponse, TeamUpdate
+from .team import TeamBase, TeamResponse, TeamUpdate, TeamViewTeamMember, TeamViewTeamMemberResponse
 
 from .team_request import TeamRequestBase, TeamRequestResponse, TeamRequestHandle
 

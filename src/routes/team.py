@@ -1,5 +1,5 @@
 from fastapi import APIRouter, status, HTTPException, Depends
-from src.schemas import TeamBase, TeamResponse,TeamUpdate
+from src.schemas import TeamBase, TeamResponse,TeamUpdate, TeamViewTeamMember, TeamViewTeamMemberResponse
 from sqlalchemy.orm import Session
 from src.config.settings import get_db
 from src.services import get_id
@@ -391,4 +391,68 @@ def replace_my_team(replace_team: TeamBase,id: int= Depends(get_id),db: Session=
           raise HTTPException(
                status_code    = status.HTTP_500_INTERNAL_SERVER_ERROR,
                detail         = "Internal Server Error while replacing the team."
+          )
+
+@team.get('/view-my-team-members/{target_team_id}', response_model= list[TeamViewTeamMemberResponse], status_code= status.HTTP_200_OK)
+def team_member(target_team_id: int, id: int= Depends(get_id), db: Session= Depends(get_db)):
+     """
+     Retrieves profile details of all members within the specified team.
+     Ensures the requesting user is active, holds a valid profile, and belongs to the target team.
+     """
+     
+     existing_user = db.query(User).filter(User.id == id, User.is_active == True).first()
+
+     if not existing_user:
+          raise HTTPException(
+               status_code    = status.HTTP_404_NOT_FOUND,
+               detail         = "User not found."
+          )
+     
+     existing_profile = db.query(Profile).filter(Profile.user_id == id, Profile.is_active == True).first()
+
+     if not existing_profile:
+          raise HTTPException(
+               status_code    = status.HTTP_404_NOT_FOUND,
+               detail         = "Profile not found or has been deleted. Please create a new profile."
+          )
+
+     existing_team_member = db.query(TeamMember).filter(TeamMember.user_id == id, TeamMember.is_active == True).first()
+
+     if not existing_team_member:
+          raise HTTPException(
+               status_code    = status.HTTP_404_NOT_FOUND,
+               detail         = "No active team association found for this account."
+          )
+     
+     if not (target_team_id == existing_team_member.team_id):
+          raise HTTPException(
+               status_code    = status.HTTP_403_FORBIDDEN,
+               detail         = "Access Denied: You do not have permission to view members of other teams."
+          )
+     
+     try:
+          all_team_member          = db.query(TeamMember).filter(TeamMember.team_id == existing_team_member.team_id).all()
+
+          all_team_member_id       = [member.user_id for member in all_team_member]
+
+          all_team_member_lst      = []
+
+          all_team_member_profile  = db.query(Profile).filter(Profile.user_id.in_(all_team_member_id)).all()
+
+          for member in all_team_member_profile:
+               all_team_member_dict = {
+                    "team_member_name"            : member.full_name,
+                    "team_member_github_url"      : member.github_url,
+                    "team_member_linkedin_url"    : member.linkedin_url,
+                    "team_member_user_id"         : member.user_id
+               }
+               all_team_member_lst.append(all_team_member_dict)
+          
+          return all_team_member_lst
+     
+     except Exception as e:
+          print(e)
+          raise HTTPException(
+               status_code    = status.HTTP_500_INTERNAL_SERVER_ERROR,
+               detail         = "Internal Server Error: Unable to process the request for team data."
           )
