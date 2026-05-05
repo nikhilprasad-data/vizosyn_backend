@@ -12,7 +12,7 @@ team = APIRouter()
 def create_team(new_team: TeamBase, db: Session= Depends(get_db), admin_id: int= Depends(get_id)):
      """Initializes a new team and automatically assigns the creator as the admin and first member."""
 
-     existing_user = db.query(User).filter(User.id == admin_id).first()
+     existing_user = db.query(User).filter(User.id == admin_id, User.is_active == True).first()
 
      if not existing_user:
           raise HTTPException(
@@ -28,7 +28,7 @@ def create_team(new_team: TeamBase, db: Session= Depends(get_db), admin_id: int=
                detail         = "Profile not found or has been deleted. Please create a new profile."
           )
      
-     existing_team = db.query(TeamMember).filter(TeamMember.user_id == admin_id).first()
+     existing_team = db.query(TeamMember).filter(TeamMember.user_id == admin_id, TeamMember.is_active == True).first()
 
      if existing_team:
           raise HTTPException(
@@ -83,7 +83,7 @@ def create_team(new_team: TeamBase, db: Session= Depends(get_db), admin_id: int=
 def get_my_team(id: int= Depends(get_id), db: Session= Depends(get_db)):
      """Retrieves detailed information and current status of the team the authenticated user belongs to."""
 
-     existing_user = db.query(User).filter(User.id == id).first()
+     existing_user = db.query(User).filter(User.id == id, User.is_active == True).first()
 
      if not existing_user:
           raise HTTPException(
@@ -99,7 +99,7 @@ def get_my_team(id: int= Depends(get_id), db: Session= Depends(get_db)):
                detail         = "Profile not found or has been deleted. Please create a new profile."
           )
      
-     existing_team_member = db.query(TeamMember).filter(TeamMember.user_id == id).first()
+     existing_team_member = db.query(TeamMember).filter(TeamMember.user_id == id, TeamMember.is_active == True).first()
 
      if not existing_team_member:
           raise HTTPException(
@@ -117,9 +117,9 @@ def get_my_team(id: int= Depends(get_id), db: Session= Depends(get_db)):
 
      try:
 
-          admin_username = db.query(User.username).filter(User.id == existing_team_details.admin_id).scalar()
+          admin_username = db.query(User.username).filter(User.id == existing_team_details.admin_id, User.is_active == True).scalar()
 
-          current_members_count = db.query(TeamMember).filter(TeamMember.team_id == existing_team_details.id).count()
+          current_members_count = db.query(TeamMember).filter(TeamMember.team_id == existing_team_details.id, TeamMember.is_active == True).count()
 
           if current_members_count < int(existing_team_details.max_members):
                team_status = "Open"
@@ -208,7 +208,7 @@ def get_all_team(id: int= Depends(get_id),db: Session= Depends(get_db)):
 def delete_my_team(id: int= Depends(get_id), db: Session= Depends(get_db)):
      """Soft-deletes the team and removes all active member associations (Admin only)."""
 
-     existing_user = db.query(User).filter(User.id == id).first()
+     existing_user = db.query(User).filter(User.id == id, User.is_active == True).first()
 
      if not existing_user:
           raise HTTPException(
@@ -224,7 +224,7 @@ def delete_my_team(id: int= Depends(get_id), db: Session= Depends(get_db)):
                detail         = "Profile not found or has been deleted. Please create a new profile."
           )
      
-     existing_team_member = db.query(TeamMember).filter(TeamMember.user_id == id).first()
+     existing_team_member = db.query(TeamMember).filter(TeamMember.user_id == id,TeamMember.is_active == True).first()
 
      if not existing_team_member:
           raise HTTPException(
@@ -281,7 +281,7 @@ def update_my_team(update_team: TeamUpdate,id: int= Depends(get_id),db: Session=
                detail         = "Profile not found or has been deleted. Please create a new profile."
           )
      
-     existing_team_member = db.query(TeamMember).filter(TeamMember.user_id == id).first()
+     existing_team_member = db.query(TeamMember).filter(TeamMember.user_id == id, TeamMember.is_active == True).first()
 
      if not existing_team_member:
           raise HTTPException(
@@ -334,7 +334,7 @@ def update_my_team(update_team: TeamUpdate,id: int= Depends(get_id),db: Session=
 def replace_my_team(replace_team: TeamBase,id: int= Depends(get_id),db: Session= Depends(get_db)):
      """Completely overwrites the team's core information with a new dataset (Admin only)."""
 
-     existing_user = db.query(User).filter(User.id == id).first()
+     existing_user = db.query(User).filter(User.id == id, User.is_active == True).first()
 
      if not existing_user:
           raise HTTPException(
@@ -350,7 +350,7 @@ def replace_my_team(replace_team: TeamBase,id: int= Depends(get_id),db: Session=
                detail         = "Profile not found or has been deleted. Please create a new profile."
           )
      
-     existing_team_member = db.query(TeamMember).filter(TeamMember.user_id == id).first()
+     existing_team_member = db.query(TeamMember).filter(TeamMember.user_id == id, TeamMember.is_active == True).first()
 
      if not existing_team_member:
           raise HTTPException(
@@ -431,7 +431,7 @@ def team_member(target_team_id: int, id: int= Depends(get_id), db: Session= Depe
           )
      
      try:
-          all_team_member          = db.query(TeamMember).filter(TeamMember.team_id == existing_team_member.team_id).all()
+          all_team_member          = db.query(TeamMember).filter(TeamMember.team_id == existing_team_member.team_id, TeamMember.is_active == True).all()
 
           all_team_member_id       = [member.user_id for member in all_team_member]
 
