@@ -1,5 +1,5 @@
 from fastapi import APIRouter, status, HTTPException, Depends
-from src.schemas import TeamBase, TeamResponse,TeamUpdate, TeamViewTeamMember, TeamViewTeamMemberResponse
+from src.schemas import TeamBase, TeamResponse,TeamUpdate, TeamViewTeamMemberResponse
 from sqlalchemy.orm import Session
 from src.config.settings import get_db
 from src.services import get_id
@@ -456,3 +456,76 @@ def team_member(target_team_id: int, id: int= Depends(get_id), db: Session= Depe
                status_code    = status.HTTP_500_INTERNAL_SERVER_ERROR,
                detail         = "Internal Server Error: Unable to process the request for team data."
           )
+     
+@team.delete('/delete-team-member/{target_user_id}', status_code= status.HTTP_200_OK)
+def delete_team_member(target_user_id: int,id: int= Depends(get_id), db: Session= Depends(get_db)):
+     """
+     Removes a team member. Requires Admin rights. Admins cannot self-remove.
+     """
+
+     existing_user = db.query(User).filter(User.id == id, 
+                                           User.is_active == True).first()
+     if not existing_user:
+          raise HTTPException(
+               status_code    = status.HTTP_404_NOT_FOUND,
+               detail         = "User not found."
+          )
+
+     existing_profile = db.query(Profile).filter(Profile.user_id == id, 
+                                                 Profile.is_active == True).first()
+     if not existing_profile:
+          raise HTTPException(
+               status_code    = status.HTTP_404_NOT_FOUND,
+               detail         = "Profile not found or has been deleted. Please create a new profile."
+          )
+
+     existing_team_member = db.query(TeamMember).filter(TeamMember.user_id == id, 
+                                                        TeamMember.is_active == True).first()
+     if not existing_team_member:
+          raise HTTPException(
+               status_code    = status.HTTP_404_NOT_FOUND,
+               detail         = "No active team association found for this account."
+          )
+     
+     existing_team_admin = db.query(Team).filter(Team.id == existing_team_member.team_id, 
+                                                 Team.admin_id == id, 
+                                                 Team.is_active == True).first()
+     
+     if not existing_team_admin:
+          raise HTTPException(
+               status_code    = status.HTTP_403_FORBIDDEN,
+               detail         = "Administrative privileges are required to remove team members."
+          )
+     
+     if existing_team_admin.admin_id == target_user_id:  # type: ignore
+          raise HTTPException(
+               status_code    = status.HTTP_400_BAD_REQUEST,
+               detail         = "The team administrator cannot be removed. Please transfer ownership or delete the team instead."
+          )
+     
+     existing_team_member_target = db.query(TeamMember).filter(TeamMember.user_id == target_user_id,  
+                                                               TeamMember.is_active == True, 
+                                                               TeamMember.team_id == existing_team_admin.id).first()
+     
+     if not existing_team_member_target:
+          raise HTTPException(
+               status_code    = status.HTTP_400_BAD_REQUEST,
+               detail         = "The specified user is not a member of your team."
+          )
+
+     try:
+          db.query(TeamMember).filter(TeamMember.user_id == target_user_id).delete(synchronize_session= False)
+
+          db.query(Team).filter(Team.admin_id == existing_team_admin.admin_id).update({"status" : "Open"})
+
+          db.commit()
+
+          return {"message" : "Team member successfully removed from the workspace."}
+
+     except Exception as e:
+          db.rollback()
+          print(e)
+          raise HTTPException(
+               status_code    = status.HTTP_500_INTERNAL_SERVER_ERROR,
+               detail         = "Unable to process the member removal request at this time. Please try again later."
+          )     
