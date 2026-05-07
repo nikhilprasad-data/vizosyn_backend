@@ -1,35 +1,6 @@
-from fastapi.security import OAuth2PasswordBearer
-from fastapi import Depends, HTTPException, status
-from jose import jwt, JWTError
-from src.config.database import Config
-from typing import Optional
+from fastapi import HTTPException, status
 from src.models import Skill
 from sqlalchemy.orm import Session
-
-oauth2passwordbearer = OAuth2PasswordBearer(tokenUrl= '/auth/login')
-
-SECRET_KEY=Config.SECRET_KEY
-ALGORITHM=Config.ALGORITHM
-
-def get_id(token: str= Depends(oauth2passwordbearer)):
-     Credential_Exception   = HTTPException(
-          status_code    = status.HTTP_401_UNAUTHORIZED,
-          detail         = "Invalid Credentials",
-          headers        = {"WWW-Authenticate" : "Bearer"},
-     )
-
-     try:
-          payload   = jwt.decode(token, SECRET_KEY, algorithms= [ALGORITHM])
-
-          id: Optional[int] = payload.get("id")
-
-          if not id:
-               raise Credential_Exception
-          
-          return id
-     
-     except JWTError:
-          raise Credential_Exception
 
 def skill_to_add(db: Session, skill_name_lst: list[str]):
      clean_skill_name_lst = [ skill_name.strip().title() for skill_name in skill_name_lst]
