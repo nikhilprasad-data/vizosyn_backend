@@ -24,7 +24,8 @@ class UserSkillResponse(BaseModel):
      model_config = ConfigDict(from_attributes= True)
 
 class UserSkillViewResponse(BaseModel):
-
+     """Schema for returning a simplified list of user skills."""
+     
      skill_name: list[str]
 
      model_config = ConfigDict(from_attributes= True)
