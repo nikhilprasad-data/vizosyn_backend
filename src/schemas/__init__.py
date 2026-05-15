@@ -12,3 +12,5 @@ from .team import TeamBase, TeamResponse, TeamUpdate, TeamViewTeamMember, TeamVi
 from .team_request import TeamRequestBase, TeamRequestResponse, TeamRequestHandle
 
 from .user_skill import UserSkillBase, UserSkillResponse, UserSkillViewResponse
+
+from .skill import SkillUser, SkillUserResponse

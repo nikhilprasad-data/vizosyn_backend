@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.orm import Session
-from src.schemas import UserSkillViewResponse
+from src.schemas import UserSkillViewResponse, SkillUser, SkillUserResponse
 from src.services import get_id
 from src.config.settings import get_db
-from src.models import User, UserSkill, Skill
+from src.models import User, UserSkill, Skill, Profile
 
 
 user_skill = APIRouter()
@@ -36,4 +36,50 @@ def view_user_skill(target_user_id: int, id : int= Depends(get_id), db: Session=
           raise HTTPException(
                status_code    = status.HTTP_500_INTERNAL_SERVER_ERROR,
                detail         = "Internal Server Error while fetching skills."
+          )
+
+@user_skill.post('/view-skill-user', response_model= list[SkillUserResponse], status_code= status.HTTP_200_OK)
+def view_skill_user(skill_list: SkillUser, id: int=  Depends(get_id), db: Session= Depends(get_db)):
+     """Fetches a detailed list of active users who possess the exact skills provided in the search payload."""
+     
+     existing_user = db.query(User).filter(User.id == id, User.is_active == True).first()
+
+     if not existing_user:
+          raise HTTPException(
+               status_code    = status.HTTP_401_UNAUTHORIZED,
+               detail         = "User not found"
+          )
+     
+     try: 
+
+          skill_info     = db.query(Skill).filter(Skill.skill_name.in_(skill_list.skill_names)).all()
+
+          skill_id       = [ skill.id for skill in skill_info]
+
+          existing_skilled_user_info = db.query(UserSkill).filter(UserSkill.skill_id.in_(skill_id)).all()
+
+          skilled_user_id     = [ user.user_id for user in existing_skilled_user_info ]
+          skilled_user_list   = []
+
+          join_query =   db.query(UserSkill.user_id.label("user_id"), Profile.full_name.label("full_name") 
+                         ).join(Profile, Profile.user_id == UserSkill.user_id
+                         ).filter(UserSkill.user_id.in_(skilled_user_id)
+                         ).all()
+          
+          for info in join_query:
+               skill_user_dict = {
+                    "user_id"      : info.user_id,
+                    "full_name"    : info.full_name
+               }
+
+               skilled_user_list.append(skill_user_dict)
+
+          return skilled_user_list
+      
+     except Exception as e:
+          print(e)
+
+          raise HTTPException(
+               status_code    = status.HTTP_500_INTERNAL_SERVER_ERROR,
+               detail         = "Internal Server Error while fetching users."
           )
