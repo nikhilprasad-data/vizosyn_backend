@@ -44,7 +44,10 @@ class TeamRequestResponse(BaseModel):
 
 class TeamRequestHandle(BaseModel):
 
-     """Schema for admins to process (Accept/Reject) pending team join requests."""
+     """
+     Schema for resolving pending team requests. 
+     Used by Admins to accept/reject user join requests, AND by Users to accept/reject team invites.
+     """
 
      request_id : int
 
