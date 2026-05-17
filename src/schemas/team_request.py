@@ -52,3 +52,25 @@ class TeamRequestHandle(BaseModel):
      request_id : int
 
      action: str
+
+class TeamRequestUserResponse(TeamRequestBase):
+
+     """Schema for sending team invitation details, including the specific request ID and admin profile, to the user."""
+
+     id: int
+
+     admin_id: int
+
+     admin_full_name: str
+
+     status: str
+
+     github_url: Optional[HttpUrl] = None
+
+     linkedin_url: Optional[HttpUrl] = None
+
+     city: str 
+
+     state: str
+
+     requested_at: datetime
